@@ -1,0 +1,22 @@
+(function executeRule(current, previous /*null when async*/) {
+    if (!current.u_table_entry_last_effective_date.changes())
+        return;
+    if (current.u_table_entry_last_effective_date.nil())
+        return;
+    // "Today" as a date (no time component)
+    var today = new GlideDate();
+    today.setValue(gs.nowDate()); // yyyy-MM-dd
+    // Effective date (date-only)
+    var eff = new GlideDate();
+    eff.setValue(current.u_table_entry_last_effective_date); // date field value
+    // If new date is before today => inactivate
+    if (eff.before(today)) {
+        if (current.u_active != false)
+            current.u_active = false;
+    }
+    // If new date is today or after today => activate
+    else {
+        if (current.u_active != true)
+            current.u_active = true;
+    }
+})(current, previous);
