@@ -1,0 +1,27 @@
+(function executeRule(current, previous /*null when async*/) {
+
+    // Only run when the date changes
+    if (!current.u_table_entry_last_effective_date.changes())
+        return;
+
+    // If cleared, do nothing (adjust if you want different behavior)
+    if (current.u_table_entry_last_effective_date.nil())
+        return;
+
+    // Compare as dates (not date/time)
+    var today = new GlideDate();
+    today.setValue(gs.nowDate()); // yyyy-MM-dd
+
+    var eff = new GlideDate();
+    eff.setValue(current.u_table_entry_last_effective_date); // date field value
+
+    // Past = before today => deactivate
+    if (eff.before(today)) {
+        current.u_active = false;
+    }
+    // Today or future => remain/be active
+    else {
+        current.u_active = true;
+    }
+
+})(current, previous);
