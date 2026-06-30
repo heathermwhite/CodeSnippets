@@ -1,0 +1,15 @@
+(function runMailScript( /* GlideRecord */ current, /* TemplatePrinter */ template,
+    /* Optional EmailOutbound */
+    email, /* Optional GlideRecord */ email_action,
+    /* Optional GlideRecord */
+    event) {
+
+    var base_instance_url = gs.getProperty('glide.servlet.uri');
+    var portalSuffix = new sn_ex_emp_fd.FoundationNotificationUtil().getPortalSuffix();
+    var requestURL = base_instance_url + portalSuffix + '?id=approval&table=sysapproval_approver&sys_id=' + current.sys_id;
+
+
+   
+ template.print('<a href="' + requestURL + '">Access record here</a>');
+
+})(current, template, email, email_action, event);
